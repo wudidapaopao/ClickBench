@@ -28,7 +28,7 @@ while read -r query; do
 done < queries.sql
 
 echo '{
-    "system": "chDB (Parquet, single)",
+    "system": "chDB (Parquet, partitioned)",
     "date": "'$(date +%Y-%m-%d)'",
     "machine": "'$machine_name'",
     "cluster_size": 1,

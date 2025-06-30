@@ -53,6 +53,8 @@ result_json = {
     "date": datetime.date.today().strftime("%Y-%m-%d"),
     "machine": "c6a.metal",
     "cluster_size": 1,
+    "proprietary": "no",
+    "tuned": "no",
     "comment": "",
     "tags": [
         "C++",

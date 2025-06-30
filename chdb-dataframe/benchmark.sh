@@ -19,7 +19,6 @@ sudo swapon /swapfile
 wget --continue --progress=dot:giga https://datasets.clickhouse.com/hits_compatible/athena/hits.parquet
 
 # Run the queries
-
 ./run.sh 2>&1 | tee log.txt
 
 echo "Load time: 0"

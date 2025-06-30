@@ -8,16 +8,19 @@ from chdb import dbapi
 
 def main():
     query = sys.stdin.read()
-    print(query)
 
     con = dbapi.connect(path=".clickbench")
     cur = con.cursor()
+    times = []
 
     for try_num in range(3):
         start = timeit.default_timer()
         cur._cursor.execute(query)
         end = timeit.default_timer()
-        print(round(end - start, 3))
+        elapsed = round(end - start, 3)
+        times.append(f"{elapsed}" if elapsed else "")
+
+    print(','.join(times))
 
     cur.close()
     con.close()

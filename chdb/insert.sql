@@ -1,3 +1,3 @@
 INSERT INTO clickbench.hits
-SELECT *
-FROM file('hits.csv');
+FROM INFILE 'hits.csv'
+FORMAT CSV;
