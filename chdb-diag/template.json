@@ -1,0 +1,7 @@
+{
+    "system": "chDB (diag)",
+    "proprietary": "no",
+    "hardware": "cpu",
+    "tuned": "no",
+    "tags": ["C++","column-oriented","ClickHouse derivative","embedded","diagnostic"]
+}
