@@ -49,7 +49,7 @@ section "[F1] gdb all-thread stack sampling: Q$QI loop @$NP"
 v267/bin/python "$H" loopq .clickbench "$Q" "$QI" "$NP" 70 >/dev/null 2>&1 &
 PID=$!; sleep 8
 for i in 1 2 3 4; do
-  gdb -p "$PID" -batch -ex 'set pagination off' -ex 'thread apply all bt 10' > "gdb_$i.txt" 2>/dev/null
+  timeout -k 5 180 gdb -p "$PID" -batch -ex 'set pagination off' -ex 'thread apply all bt 10' > "gdb_$i.txt" 2>/dev/null
   sleep 2
 done
 kill "$PID" 2>/dev/null; wait "$PID" 2>/dev/null
@@ -88,9 +88,9 @@ PY
 section "[F2] perf dwarf callgraph: Q$QI @$NP (8s, F=99)"
 v267/bin/python "$H" loopq .clickbench "$Q" "$QI" "$NP" 40 >/dev/null 2>&1 &
 PID=$!; sleep 5
-perf record --call-graph dwarf -F 99 -o perf_dwarf.data -p "$PID" -- sleep 8 >/dev/null 2>&1
+timeout -k 5 60 perf record --call-graph dwarf -F 99 -o perf_dwarf.data -p "$PID" -- sleep 8 >/dev/null 2>&1
 kill "$PID" 2>/dev/null; wait "$PID" 2>/dev/null
-perf report -i perf_dwarf.data --stdio --no-children -g graph,0.5,caller --percent-limit 3 2>/dev/null \
+timeout -k 5 300 perf report -i perf_dwarf.data --stdio --no-children -g graph,0.5,caller --percent-limit 3 2>/dev/null \
   | grep -vE '^#|^\s*$' | head -60
 
 section "[F3] knob A/B on Q$QI loop @$NP (iters in fixed 15s; higher = better)"
