@@ -51,6 +51,21 @@ def run_queries(db_path, qfile, tries, max_threads, jemalloc_bg):
     sess.close()
 
 
+HEAVY_Q = ("SELECT WatchID, ClientIP, COUNT(*) AS c, SUM(IsRefresh), AVG(ResolutionWidth) "
+           "FROM clickbench.hits GROUP BY WatchID, ClientIP ORDER BY c DESC LIMIT 10")
+
+
+def heavy(db_path, max_threads, n):
+    """Run the heavy GROUP BY n times (for wrapping under perf stat / perf record).
+    jemalloc conf is inherited from the process environment (JE_MALLOC_CONF/MALLOC_CONF)."""
+    sess = connect(db_path)
+    mt = "" if max_threads in (None, "-", "default") else f" SETTINGS max_threads={max_threads}"
+    for _ in range(n):
+        sess.query(HEAVY_Q + mt)
+    sess.close()
+    print(f"HEAVY done: n={n} max_threads={max_threads or 'default'}")
+
+
 def select1(db_path, n):
     sess = connect(db_path)
     lat = []
@@ -70,5 +85,8 @@ if __name__ == "__main__":
         mt = int(sys.argv[5]) if len(sys.argv) > 5 and sys.argv[5] != "-" else None
         jb = sys.argv[6] if len(sys.argv) > 6 else None
         run_queries(db, qf, tries, mt, jb)
+    elif mode == "heavy":
+        mt = sys.argv[3] if len(sys.argv) > 3 else None
+        heavy(sys.argv[2], mt, int(sys.argv[4]) if len(sys.argv) > 4 else 30)
     elif mode == "select1":
         select1(sys.argv[2], int(sys.argv[3]))
