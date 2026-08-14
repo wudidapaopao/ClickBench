@@ -7,8 +7,8 @@ set +e
 QDF=../chdb-dataframe/queries.sql
 H=../chdb-diag3/harness3.py
 TRIES="${DIAG_TRIES:-3}"
-RUN10_X86="${DIAG_WHEEL_RUN10_X86:-31825106389}"
-RUN10_ARM="${DIAG_WHEEL_RUN10_ARM:-31825106331}"
+RUN10_X86="${DIAG_WHEEL_RUN10_X86:-31833675592}"
+RUN10_ARM="${DIAG_WHEEL_RUN10_ARM:-31833675595}"
 section(){ echo; echo "===== $* ====="; }
 echo "############ chDB DIAG ROUND10b start $(date -u +%FT%TZ) ############"
 
