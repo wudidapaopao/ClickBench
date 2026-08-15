@@ -3,7 +3,7 @@ set -e
 
 # chdb is a Python package (ClickHouse embedded). Install it into a venv.
 sudo apt-get update -y
-sudo apt-get install -y python3-pip python3-venv
+sudo apt-get install -y python3-pip python3-venv unzip curl
 
 if [ ! -d myenv ]; then
     python3 -m venv myenv
@@ -13,4 +13,16 @@ fi
 source myenv/bin/activate
 
 pip install --upgrade pip
-pip install psutil pyarrow chdb
+# chdb: install the chdb-core CI wheel under test instead of the PyPI release.
+if [ "$(uname -m)" = "aarch64" ]; then
+    ART_URL="https://nightly.link/chdb-io/chdb-core/actions/runs/31833675595/chdb-artifacts-linux-aarch64.zip"
+else
+    ART_URL="https://nightly.link/chdb-io/chdb-core/actions/runs/31833675592/chdb-artifacts-linux-x86_64.zip"
+fi
+CHDB_ARTIFACT_URL="${CHDB_ARTIFACT_URL:-$ART_URL}"
+rm -rf chdb-artifact chdb-artifact.zip
+curl -fSL --retry 3 -o chdb-artifact.zip "$CHDB_ARTIFACT_URL"
+unzip -q -o -j chdb-artifact.zip '*.whl' -d chdb-artifact
+wheel=$(ls chdb-artifact/chdb_core-*.whl 2>/dev/null | grep -v _lite | head -n1)
+pip install psutil pyarrow "$wheel"
+python3 -c "import chdb; print('chdb', chdb.__version__)"
