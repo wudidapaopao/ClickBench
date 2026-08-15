@@ -21,9 +21,9 @@ pip install --quiet pandas pyarrow fastapi uvicorn
 # libchdb tarballs and debug info we don't need. The x86_64 and aarch64
 # wheels come from different workflow runs of the same commit.
 if [ "$(uname -m)" = "aarch64" ]; then
-    DEFAULT_ARTIFACT_URL="https://nightly.link/chdb-io/chdb-core/actions/runs/31833675595/chdb-artifacts-linux-aarch64.zip"
+    DEFAULT_ARTIFACT_URL="https://nightly.link/chdb-io/chdb-core/actions/runs/31879785905/chdb-artifacts-linux-aarch64.zip"
 else
-    DEFAULT_ARTIFACT_URL="https://nightly.link/chdb-io/chdb-core/actions/runs/31833675592/chdb-artifacts-linux-x86_64.zip"
+    DEFAULT_ARTIFACT_URL="https://nightly.link/chdb-io/chdb-core/actions/runs/31879785763/chdb-artifacts-linux-x86_64.zip"
 fi
 CHDB_ARTIFACT_URL="${CHDB_ARTIFACT_URL:-$DEFAULT_ARTIFACT_URL}"
 rm -rf chdb-artifact chdb-artifact.zip
